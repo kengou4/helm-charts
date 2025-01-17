@@ -1,7 +1,5 @@
 name: "Helm lint"
-on:
-  pull_request:
-    types: [ opened, synchronize, reopened ]
+on: {}
 
 env:
   REGISTRY: ghcr.io
