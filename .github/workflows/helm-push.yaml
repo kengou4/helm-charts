@@ -5,13 +5,13 @@ on:
     branches:
       - master
     paths:
-      - common
-      - global
-      - openstack
-      - prometheus-exporters
-      - prometheus-rules
-      - px
-      - system
+      - 'common/**'
+      - 'global/**'
+      - 'openstack/**'
+      - 'prometheus-exporters/**'
+      - 'prometheus-rules/**'
+      - 'px/**'
+      - 'system/**'
 
 permissions:
   contents: write
