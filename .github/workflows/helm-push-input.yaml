@@ -74,8 +74,8 @@ jobs:
             helm package ${{ inputs.chartDir }} -d ${{ inputs.chartDir }}
             PKG_NAME=`ls ${{ inputs.chartDir }}/*.tgz`
             if [ ${{ inputs.chartName }} ]; then
+              mv ${PKG_NAME} ${{ inputs.chartDir }}/${{ inputs.chartName }}.tgz
               PKG_NAME=${{ inputs.chartName }}
-              mv ${{ inputs.chartDir }}/*.tgz ${{ inputs.chartDir }}/${{ inputs.chartName }}.tgz
             fi
             if [ ${{ inputs.dry-run }} == 'true' ]; then
               echo "Dry run: Skipping push of $PKG_NAME"
