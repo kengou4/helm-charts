@@ -1,4 +1,4 @@
-name: Package Helm Chart and publish to GitHub Packages
+name: Package and publish Helm chart to GHCR with input
 
 on:
     workflow_dispatch:
