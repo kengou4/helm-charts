@@ -70,15 +70,15 @@ jobs:
 
       - name: Push Charts to GHCR
         run: |
-            helm dependency update ${{ inputs.chartDir }}
-            helm package ${{ inputs.chartDir }} -d ${{ inputs.chartDir }}
             PKG_NAME=`ls ${{ inputs.chartDir }}/*.tgz`
             if [ ${{ inputs.chartName }} ]; then
               PKG_NAME=${{ inputs.chartName }}
             fi
+            helm dependency update ${{ inputs.chartDir }}
+            helm package ${PKG_NAME} -d ${{ inputs.chartDir }}
             if [ ${{ inputs.dry-run }} == 'true' ]; then
               echo "Dry run: Skipping push of $PKG_NAME"
               exit 0
             else
-                helm push ${PKG_NAME} oci://${{ env.REGISTRY }}/${{ github.repository }}/
+              helm push ${PKG_NAME} oci://${{ env.REGISTRY }}/${{ github.repository }}/
             fi
