@@ -73,6 +73,9 @@ jobs:
             helm dependency update ${{ inputs.chartDir }}
             helm package ${{ inputs.chartDir }} -d ${{ inputs.chartDir }}
             PKG_NAME=`ls ${{ inputs.chartDir }}/*.tgz`
+            echo ${PKG_NAME}
+            echo ${{ inputs.chartName }}
+            exit 0
             if [ ${{ inputs.chartName }} ]; then
               mv ${PKG_NAME} ${{ inputs.chartDir }}/${{ inputs.chartName }}.tgz
               PKG_NAME=${{ inputs.chartName }}
