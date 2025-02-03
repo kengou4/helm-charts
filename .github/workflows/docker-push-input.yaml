@@ -34,8 +34,18 @@ jobs:
       id-token: write
 
     steps:
+      - name: Print inputs
+        run: |
+          echo "Dockerfile: ${{ inputs.Dockerfile }}"
+          echo "ImageName: ${{ inputs.ImageName }}"
+          echo "ImageTag: ${{ inputs.ImageTag }}"
+          echo "dry-run: ${{ inputs.dry-run }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Change directory to Dockerfile location
+        run: cd $(dirname ${{ inputs.Dockerfile }})
 
       - name: Install cosign
         uses: sigstore/cosign-installer@v3.7.0
@@ -78,8 +88,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: false
-          platforms: |
-            linux/amd64
+          #platforms: |
+          #  linux/amd64
 
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
