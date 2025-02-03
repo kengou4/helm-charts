@@ -74,6 +74,7 @@ jobs:
         with:
           context: .
           file: ${{ inputs.Dockerfile }}
+          push: ${{ !inputs.dry-run }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: false
