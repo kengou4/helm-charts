@@ -7,10 +7,6 @@ on:
           description: 'Directory containing the Helm chart to package and publish'
           required: true
           type: string
-        chartName:
-          description: 'Name of the Helm chart to package and publish(optional)'
-          required: false
-          type: string
         dry-run:
           description: 'Run the workflow without pushing the Helm chart to the registry'
           type: boolean
@@ -32,7 +28,6 @@ jobs:
       - name: Print inputs
         run: |
           echo "chartDir: ${{ inputs.chartDir }}"
-          echo "chartName: ${{ inputs.chartName }}"
           echo "dry-run: ${{ inputs.dry-run }}"
 
       - uses: actions/checkout@v4
@@ -73,13 +68,6 @@ jobs:
             helm dependency update ${{ inputs.chartDir }}
             helm package ${{ inputs.chartDir }} -d ${{ inputs.chartDir }}
             PKG_NAME=`ls ${{ inputs.chartDir }}/*.tgz`
-            echo ${PKG_NAME}
-            echo ${{ inputs.chartName }}
-            exit 0
-            if [ ${{ inputs.chartName }} ]; then
-              mv ${PKG_NAME} ${{ inputs.chartDir }}/${{ inputs.chartName }}.tgz
-              PKG_NAME=${{ inputs.chartName }}
-            fi
             if [ ${{ inputs.dry-run }} == 'true' ]; then
               echo "Dry run: Skipping push of $PKG_NAME"
               exit 0
