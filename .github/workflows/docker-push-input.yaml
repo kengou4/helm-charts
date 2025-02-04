@@ -45,7 +45,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Change directory to Dockerfile location
-        run: cd $(dirname ${{ inputs.Dockerfile }})
+        id: change-dir
+        run: echo "CONTEXT=$(dirname ${{ inputs.Dockerfile }})" >> "$GITHUB_OUTPUT"
 
       - name: Install cosign
         uses: sigstore/cosign-installer@v3.7.0
@@ -82,6 +83,7 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@v6
         with:
+          context: ${{ steps.change-dir.outputs.CONTEXT }}
           file: ${{ inputs.Dockerfile }}
           push: ${{ !inputs.dry-run }}
           tags: ${{ steps.meta.outputs.tags }}
