@@ -1,16 +1,16 @@
 name: Package and publish Helm chart to GHCR with input
 
 on:
-    workflow_dispatch:
-      inputs:
-        chartDir:
-          description: 'Directory containing the Helm chart to package and publish'
-          required: true
-          type: string
-        dry-run:
-          description: 'Run the workflow without pushing the Helm chart to the registry'
-          type: boolean
-          required: false
+  workflow_dispatch:
+    inputs:
+      chartDir:
+        description: 'Directory containing the Helm chart to package and publish'
+        required: true
+        type: string
+      dry-run:
+        description: 'Run the workflow without pushing the Helm chart to the registry'
+        type: boolean
+        required: false
 
 permissions:
   contents: write
@@ -25,14 +25,8 @@ jobs:
     runs-on: [ ubuntu-latest ]
 
     steps:
-      - name: Print inputs
-        run: |
-          echo "chartDir: ${{ inputs.chartDir }}"
-          echo "dry-run: ${{ inputs.dry-run }}"
-
       - uses: actions/checkout@v4
         with:
-            fetch-depth: 0
             token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
@@ -45,7 +39,6 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-            python-version: 3.9
             check-latest: true
             token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -67,7 +60,7 @@ jobs:
         run: |
             helm dependency update ${{ inputs.chartDir }}
             helm package ${{ inputs.chartDir }} -d ${{ inputs.chartDir }}
-            PKG_NAME=`ls ${{ inputs.chartDir }}/*.tgz`
+            PKG_NAME=$(ls ${{ inputs.chartDir }}/*.tgz)
             if [ ${{ inputs.dry-run }} == 'true' ]; then
               echo "Dry run: Skipping push of $PKG_NAME"
               exit 0
